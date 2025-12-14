@@ -13,8 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const yesButton = document.querySelector('[data-action="yes"]');
   const noButton = document.querySelector('[data-action="no"]');
   const confirmText = document.querySelector(".question__confirm");
-  const audio = document.getElementById("bg-audio");
-  const audioToggle = document.querySelector(".audio-toggle");
   const gardenScene = document.querySelector('[data-role="garden"]');
   let noConfirmShown = false;
 
@@ -22,23 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     emailjs.init("YOUR_PUBLIC_KEY");
   }
 
-  const updateAudioToggle = () => {
-    if (!audio || !audioToggle) return;
-    const icon = audioToggle.querySelector(".audio-toggle__icon");
-    const text = audioToggle.querySelector(".audio-toggle__text");
-    const isMuted = audio.muted;
-    audioToggle.setAttribute("aria-pressed", String(!isMuted));
-    if (icon) icon.textContent = isMuted ? "🔇" : "🔊";
-    if (text) text.textContent = isMuted ? "Sound off" : "Sound on";
-  };
-
-  const tryPlayAudio = () => {
-    if (!audio || audio.dataset.played === "true" || audio.muted) return;
-    audio.dataset.played = "true";
-    audio.play().catch(() => {
-      audio.dataset.played = "false";
-    });
-  };
+  const tryPlayAudio = () => {};
 
   const releaseNotLoadedState = () => {
     if (document.body && document.body.classList.contains("not-loaded")) {
@@ -99,17 +81,20 @@ document.addEventListener("DOMContentLoaded", () => {
     sealButton?.classList.remove("is-gone");
   };
 
-  if (sealButton) {
-    sealButton.addEventListener("click", openLetter);
-  }
+  const bindPress = (el, handler) => {
+    if (!el) return;
+    const invoke = (event) => {
+      event.preventDefault();
+      handler();
+    };
+    el.addEventListener("click", invoke, { passive: false });
+    el.addEventListener("touchstart", invoke, { passive: false });
+  };
 
-  if (closeButton) {
-    closeButton.addEventListener("click", closeLetter);
-  }
+  bindPress(sealButton, openLetter);
 
-  if (backdrop) {
-    backdrop.addEventListener("click", closeLetter);
-  }
+  bindPress(closeButton, closeLetter);
+  bindPress(backdrop, closeLetter);
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && letterModal?.classList.contains("is-visible")) {
@@ -117,16 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  if (audioToggle && audio) {
-    audioToggle.addEventListener("click", () => {
-      audio.muted = !audio.muted;
-      updateAudioToggle();
-      if (!audio.muted) {
-        tryPlayAudio();
-      }
-    });
-    updateAudioToggle();
-  }
+  // audio removed
 
   initGarden();
 

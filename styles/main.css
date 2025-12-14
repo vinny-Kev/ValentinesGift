@@ -1574,6 +1574,7 @@ body {
   box-shadow: 0 0.4rem 0.8rem rgba(0, 0, 0, 0.16), inset 0 0.42rem 0.85rem rgba(255, 255, 255, 0.32), inset 0 -0.32rem 0.78rem rgba(92, 10, 18, 0.5);
   transition: transform 0.6s ease, opacity 0.6s ease;
   z-index: 4;
+  touch-action: manipulation;
 }
 
 .letter__seal span {
