@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("contextmenu", preventDefault);
   document.addEventListener("selectstart", preventDefault);
   document.addEventListener("dragstart", preventDefault);
+  const loader = document.querySelector(".loader");
 
   // Block double-tap zoom on mobile
   document.addEventListener(
@@ -44,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.body && document.body.classList.contains("not-loaded")) {
       document.body.classList.remove("not-loaded");
     }
+    loader?.classList.add("is-done");
   };
 
   const triggerGardenBloom = () => {
