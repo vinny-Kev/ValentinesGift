@@ -4,6 +4,24 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("selectstart", preventDefault);
   document.addEventListener("dragstart", preventDefault);
 
+  // Block double-tap zoom on mobile
+  document.addEventListener(
+    "touchend",
+    (() => {
+      let lastTouch = 0;
+      return (event) => {
+        const now = Date.now();
+        if (now - lastTouch < 350) {
+          event.preventDefault();
+        }
+        lastTouch = now;
+      };
+    })(),
+    { passive: false }
+  );
+
+  document.addEventListener("dblclick", preventDefault, { passive: false });
+
   const envelope = document.querySelector(".letter__envelope");
   const letterModal = document.querySelector(".letter__modal");
   const letterBody = document.getElementById("letterBody");
